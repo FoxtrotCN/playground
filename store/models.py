@@ -3,6 +3,12 @@ from django.db import models
 # Create your models here.
 
 
+class Promotion(models.Model):
+    description = models.CharField(max_length=255)
+    discount = models.FloatField()
+    # product_set ---> all the products that applies the promotion
+
+
 class Category(models.Model):
     title = models.CharField(max_length=255)
 
@@ -14,6 +20,7 @@ class Product(models.Model):
     stock = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    promotions = models.ManyToManyField(Promotion)
 
 
 class Customer(models.Model):
