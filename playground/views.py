@@ -13,4 +13,7 @@ def say_hello(request):
 
     # Categories that don't have a featured product
     categories_without_featured_product = Category.objects.filter(featured_product__isnull=True)
-    return render(request, 'hello.html', {'categories': categories_without_featured_product})
+
+    # Products with low stock
+    products_with_low_stock = Product.objects.filter(stock__lt=10)
+    return render(request, 'hello.html', {'products': products_with_low_stock})
