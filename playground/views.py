@@ -7,8 +7,5 @@ from store.models import Product, Customer, Category, Order, OrderItem
 
 
 def say_hello(request):
-    # 0, 1, 2, 3, 4
-    queryset = Product.objects.all()[:5]
-    # 5, 6, 7, 8, 9
-    queryset2 = Product.objects.all()[5:10]
+    queryset = Product.objects.values('id', 'title', 'category__title')
     return render(request, 'hello.html', {'products': queryset})
