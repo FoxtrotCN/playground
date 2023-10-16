@@ -7,9 +7,5 @@ from store.models import Product, Customer, Category, Order, OrderItem
 
 
 def say_hello(request):
-    # Products: Stock < 10 or Price < 20 | Using the Q object that stands for Query
-    queryset = Product.objects.filter(Q(stock__lt=10) | Q(price__lt=20))
-
-    # Products: stock = price | using the F object from django to referencing fields
-    queryset2 = Product.objects.filter(stock=F('category__id'))
-    return render(request, 'hello.html', {'products': queryset2})
+    queryset = Product.objects.order_by('title')
+    return render(request, 'hello.html', {'products': queryset})
