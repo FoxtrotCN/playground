@@ -8,4 +8,11 @@ from store.models import Product, Customer, Category, Order, OrderItem
 
 def say_hello(request):
     queryset = Product.objects.values_list('id', 'title', 'category__title')
-    return render(request, 'hello.html', {'products': queryset})
+
+    """
+        Exercise: Select Products that have been ordered
+                  and sort them by title
+    """
+
+    ordered_products = Product.objects.filter(id__in=OrderItem.objects.values('product_id').distinct()).order_by('title')
+    return render(request, 'hello.html', {'products': ordered_products})
