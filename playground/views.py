@@ -1,34 +1,17 @@
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models.aggregates import Count, Max, Min, Avg, Sum
 from django.db.models import Value, Func, F, ExpressionWrapper, DecimalField
 from django.db.models.functions import Concat
 from store.models import Product, Customer, Category, Order, OrderItem
+from tags.models import TaggedItem
 
 
 # Create your views here.
 
 
 def say_hello(request):
-    # Annotating Exercises
-
-    # Customers with their last order ID
-    queryset = Customer.objects.annotate(last_order_id=Max('order__id'))
-
-    # Categories and count of their products
-    queryset = Category.objects.annotate(products_count=Count('product'))
-
-    # Customers with more than 5 orders
-    queryset = Customer.objects.annotate(
-        orders_count=Count('order')
-    ).filter(orders_count__gt=5).order_by('orders_count')
-
-    # Customers and the total amount they've spent
-    queryset = Customer.objects.annotate(total_spent=Sum(F('order__orderitem__unit_price') * F('order__orderitem__quantity')))
-
-    # Top 5 best-selling products and their total sales
-    queryset = Product.objects.annotate(total_sales=Sum(
-        F('orderitem__unit_price') *
-        F('orderitem__quantity')
-    )).order_by('-total_sales')[:5]
+    content_type = ContentType.objects.get_for_model(Product)
+    queryset = TaggedItem.objects.select_related('tag').filter(content_type=content_type, object_id=1)
     return render(request, 'hello.html', {'queryset': list(queryset)})
