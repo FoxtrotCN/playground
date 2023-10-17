@@ -7,12 +7,10 @@ from store.models import Product, Customer, Category, Order, OrderItem
 
 
 def say_hello(request):
-    queryset = Product.objects.values_list('id', 'title', 'category__title')
 
     """
-        Exercise: Select Products that have been ordered
-                  and sort them by title
+        Exercise: Get the last 5 orders with their customer
+                  and items (incl product)
     """
-
-    ordered_products = Product.objects.filter(id__in=OrderItem.objects.values('product_id').distinct()).order_by('title')
-    return render(request, 'hello.html', {'products': ordered_products})
+    queryset = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
+    return render(request, 'hello.html', {'orders': queryset})
