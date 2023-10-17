@@ -22,4 +22,7 @@ def say_hello(request):
     queryset = Customer.objects.annotate(
         orders_count=Count('order')
     ).filter(orders_count__gt=5).order_by('orders_count')
+
+    # Customers and the total amount they've spent
+    queryset = Customer.objects.annotate(total_spent=Sum(F('order__orderitem__unit_price') * F('order__orderitem__quantity')))
     return render(request, 'hello.html', {'queryset': list(queryset)})
