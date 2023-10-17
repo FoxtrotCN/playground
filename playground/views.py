@@ -14,4 +14,7 @@ def say_hello(request):
 
     # Customers with their last order ID
     queryset = Customer.objects.annotate(last_order_id=Max('order__id'))
+
+    # Categories and count of their products
+    queryset = Category.objects.annotate(products_count=Count('product'))
     return render(request, 'hello.html', {'queryset': list(queryset)})
