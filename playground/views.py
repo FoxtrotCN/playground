@@ -10,8 +10,8 @@ from store.models import Product, Customer, Category, Order, OrderItem
 
 
 def say_hello(request):
-    discounted_price = ExpressionWrapper(F('price') * 0.8, output_field=DecimalField())
-    queryset = Product.objects.annotate(
-        discounted_price=discounted_price
-    )
+    # Annotating Exercises
+
+    # Customers with their last order ID
+    queryset = Customer.objects.annotate(last_order_id=Max('order__id'))
     return render(request, 'hello.html', {'queryset': list(queryset)})
