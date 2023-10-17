@@ -26,4 +26,9 @@ def say_hello(request):
     # Customers and the total amount they've spent
     queryset = Customer.objects.annotate(total_spent=Sum(F('order__orderitem__unit_price') * F('order__orderitem__quantity')))
 
+    # Top 5 best-selling products and their total sales
+    queryset = Product.objects.annotate(total_sales=Sum(
+        F('orderitem__unit_price') *
+        F('orderitem__quantity')
+    )).order_by('-total_sales')[:5]
     return render(request, 'hello.html', {'queryset': list(queryset)})
