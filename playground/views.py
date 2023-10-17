@@ -17,4 +17,9 @@ def say_hello(request):
 
     # Categories and count of their products
     queryset = Category.objects.annotate(products_count=Count('product'))
+
+    # Customers with more than 5 orders
+    queryset = Customer.objects.annotate(
+        orders_count=Count('order')
+    ).filter(orders_count__gt=5).order_by('orders_count')
     return render(request, 'hello.html', {'queryset': list(queryset)})
