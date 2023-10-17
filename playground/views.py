@@ -18,5 +18,7 @@ def say_hello(request):
     # How many units of product 1 have we sold?
     result = OrderItem.objects.filter(product__id=1).aggregate(units_sold=Sum('quantity'))
 
+    # How many orders has customer 1 placed?
+    result = Order.objects.filter(customer__id=1).aggregate(orders_placed=Count('id'))
 
     return render(request, 'hello.html', {'result': result})
