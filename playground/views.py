@@ -10,8 +10,11 @@ def say_hello(request):
 
 
     """
-        Exercise: Get the last 5 orders with their customer
-                  and items (incl product)
+        Aggregating Exercises:
     """
-    result = Product.objects.aggregate(Count('id'))
+    # How many orders do we have?
+    result = Order.objects.aggregate(count=Count('id'))
+
+    # How many units of product 1 have we sold?
+
     return render(request, 'hello.html', {'result': result})
