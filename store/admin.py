@@ -44,6 +44,7 @@ class StockFiltering(admin.SimpleListFilter):
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
+    actions = ['clear_stock']
     list_display = ['title', 'price', 'stock_status', 'category_title']
     list_editable = ['price']
     list_filter = ['category', 'last_update', StockFiltering]
@@ -58,6 +59,12 @@ class ProductAdmin(admin.ModelAdmin):
         if product.stock < 10:
             return "Low"
         return "Ok"
+
+    @admin.action(description='Clear Stock')
+    def clear_stock(self, request, queryset: QuerySet):
+        update_count = queryset.update(stock=0)
+        self.message_user(request, f"{update_count} products were successfully updated.")
+
 
 
 @admin.register(models.Customer)
