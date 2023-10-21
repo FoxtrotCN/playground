@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.db.models import Count
+from django.db.models import Count, QuerySet
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
 
@@ -28,10 +28,25 @@ class CategoryAdmin(admin.ModelAdmin):
         )
 
 
+class StockFiltering(admin.SimpleListFilter):
+    title = 'Stock'
+    parameter_name = 'stock'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('<10', 'Low')
+        ]
+
+    def queryset(self, request, queryset: QuerySet):
+        if self.value() == '<10':
+            return queryset.filter(stock__lt=10)
+
+
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['title', 'price', 'stock_status', 'category_title']
     list_editable = ['price']
+    list_filter = ['category', 'last_update', StockFiltering]
     list_per_page = 10
     list_select_related = ['category']
 
