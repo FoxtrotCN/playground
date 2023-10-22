@@ -11,6 +11,7 @@ from . import models
 
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
+    search_fields = ['title']
     list_display = ['title', 'products_count']
 
     @admin.display(ordering='products_count')
@@ -44,6 +45,10 @@ class StockFiltering(admin.SimpleListFilter):
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['category']
+    prepopulated_fields = {
+        'slug': ['title']
+    }
     actions = ['clear_stock']
     list_display = ['title', 'price', 'stock_status', 'category_title']
     list_editable = ['price']
@@ -64,7 +69,6 @@ class ProductAdmin(admin.ModelAdmin):
     def clear_stock(self, request, queryset: QuerySet):
         update_count = queryset.update(stock=0)
         self.message_user(request, f"{update_count} products were successfully updated.")
-
 
 
 @admin.register(models.Customer)
@@ -93,5 +97,6 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['customer']
     list_display = ['id', 'placed_at', 'payment_status', 'customer']
     list_per_page = 10
