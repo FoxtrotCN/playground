@@ -3,6 +3,7 @@ from django.db.models import Count, QuerySet
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
 
+from tags.models import TaggedItem
 from . import models
 
 
