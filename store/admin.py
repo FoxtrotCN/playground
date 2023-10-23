@@ -46,6 +46,7 @@ class StockFiltering(admin.SimpleListFilter):
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     autocomplete_fields = ['category']
+    search_fields = ['title']
     prepopulated_fields = {
         'slug': ['title']
     }
@@ -95,8 +96,17 @@ class CustomerAdmin(admin.ModelAdmin):
         )
 
 
+class OrderItemInLine(admin.TabularInline):
+    autocomplete_fields = ['product']
+    min_num = 1
+    max_num = 10
+    model = models.OrderItem
+    extra = 0
+
+
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
     autocomplete_fields = ['customer']
+    inlines = [OrderItemInLine]
     list_display = ['id', 'placed_at', 'payment_status', 'customer']
     list_per_page = 10
