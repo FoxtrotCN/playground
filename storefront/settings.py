@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',  # Not use anymore
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'playground',
     'debug_toolbar',
     'store',
