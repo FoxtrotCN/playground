@@ -9,6 +9,7 @@ class ProductSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=255)
     price = serializers.DecimalField(max_digits=6, decimal_places=2)
     price_with_taxes = serializers.SerializerMethodField(method_name='tax_calculation')
+    category = serializers.StringRelatedField()
 
     def tax_calculation(self, product: Product):
         return product.price * Decimal(1.1)
