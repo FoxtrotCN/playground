@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import *
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, CategorySerializer
 
 
 @api_view()
@@ -29,3 +29,11 @@ def product_detail(request, _id):
     serializer = ProductSerializer(product)
     data = serializer.data
     return Response(data)
+
+
+@api_view()
+def category_detail(request, _id):
+    category = get_object_or_404(Category, pk=_id)
+    serializer = CategorySerializer(category)
+    data = serializer.data
+    return Response("ok")
